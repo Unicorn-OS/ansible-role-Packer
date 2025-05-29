@@ -1,9 +1,16 @@
 ---
-# Latest from official repo!
+# Latest from official repo
+# https://developer.hashicorp.com/packer/install
+
 - name: Add the HashiCorp GPG key.
-  ansible.builtin.apt_key:
-    url: https://apt.releases.hashicorp.com/gpg
+  ansible.builtin.deb822_repository:
+    name: hashicorp-packer
+    types: [deb]
+    uris: "https://apt.releases.hashicorp.com/gpg"
+    components: [binary]
+    signed_by: https://apt.releases.hashicorp.com
     state: present
+    enabled: true
 
 - name: get Architecture
   set_fact:
@@ -11,10 +18,16 @@
 
 - name: Add specified repository into sources list
   ansible.builtin.apt_repository:
-    repo: "deb [arch={{arch}}] https://apt.releases.hashicorp.com {{codename}} main"
+    repo: "deb [arch={{arch}}] https://apt.releases.hashicorp.com {{ codename }} main"
     state: present
 
-- name: install
-  ansible.builtin.apt:
+
+# Almost Working! Problem in GPG & sources:
+#/etc/apt/sources.list.d/hashicorp-packer.sources
+
+# - meta: end_play
+
+- name: Install Packer
+  apt:
     pkg:
     - packer

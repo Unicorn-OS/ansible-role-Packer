@@ -1,6 +1,9 @@
+---
+# Modern Ubuntu is not in Hashicorp's repositories yet! This Compares with the Latest supported release, and uses that instead:
+
 - name: IF same or older, use Default codename
   set_fact:
-    codename: "{{ansible_distribution_release}}"
+    codename: "{{ ansible_distribution_release }}"
   when: (ansible_distribution_version | replace('.','')) <= (ubuntu_latest_supported_ver | replace('.',''))
 
 - name: IF newer, Set codename to latest supported
@@ -8,6 +11,6 @@
     codename: "{{ ubuntu_latest_supported_codename }}"
   when: (ansible_distribution_version | replace('.','')) > (ubuntu_latest_supported_ver | replace('.',''))
 
-- name:
-  debug:
-    msg: "{{ codename }}"
+# - name:
+#   debug:
+#     msg: "{{ codename }}"
